@@ -1,0 +1,11 @@
+✅ ALL FIXED! Installed uuid package.
+
+The app should now bundle without errors!
+
+To reload in Expo Go:
+- Press 'r' in terminal
+- OR shake phone and tap "Reload"
+
+Your app is ready to work!
+
+
