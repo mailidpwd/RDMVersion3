@@ -3144,13 +3144,13 @@ const styles = StyleSheet.create({
   },
   // Goal Meter Card (Left)
   goalMeterCard: {
-    flex: 1,
-    minHeight: 125,
+    flex: 0.60,
+    height: 135,
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    padding: 10,
-    paddingTop: 8,
-    paddingBottom: 8,
+    padding: 12,
+    paddingTop: 10,
+    paddingBottom: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
@@ -3201,8 +3201,8 @@ const styles = StyleSheet.create({
   },
   // Portfolio Card (Right) - Clean Simple Design
   portfolioCard: {
-    width: 135,
-    minHeight: 125,
+    flex: 0.40,
+    height: 135,
     borderRadius: 14,
     padding: 14,
     shadowColor: '#20C997',
@@ -3216,7 +3216,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 12,
   },
   portfolioIconCircle: {
     width: 32,
@@ -3227,6 +3227,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.4)',
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: 8,
   },
   portfolioToggle: {
     flexDirection: 'row',
