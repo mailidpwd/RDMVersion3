@@ -6,8 +6,6 @@ import {
   StyleSheet,
   ScrollView,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Colors } from '../constants/Colors';
 
 export default function QuizLandingScreen({ navigation }) {
   const categories = [
@@ -46,12 +44,9 @@ export default function QuizLandingScreen({ navigation }) {
     <ScrollView style={styles.container}>
       {/* Discover Your Leadership Profile Card */}
       <View style={styles.discoverCard}>
-        <LinearGradient
-          colors={['#9B7EDE', '#764BA2']}
-          style={styles.discoverGradient}
-        >
-          {/* Target Icon on Left */}
-          <Text style={styles.targetIcon}>🎯</Text>
+        <View style={styles.discoverContent}>
+          {/* Icon on Left - Changed to star */}
+          <Text style={styles.discoverIcon}>⭐</Text>
 
           {/* Center Content */}
           <View style={styles.discoverCenter}>
@@ -59,7 +54,7 @@ export default function QuizLandingScreen({ navigation }) {
             <View style={styles.tagContainer}>
               <Text style={styles.tagText}>Quick Assessment</Text>
             </View>
-            <Text style={styles.discoverDescription}>
+            <Text style={styles.discoverDescription} numberOfLines={1}>
               Uncover your true leadership potential. Our advanced insights reveal your core strengths.
             </Text>
           </View>
@@ -69,7 +64,7 @@ export default function QuizLandingScreen({ navigation }) {
             <Text style={styles.rightIcon}>⚡</Text>
             <Text style={styles.rightIcon}>⏱️</Text>
           </View>
-        </LinearGradient>
+        </View>
       </View>
 
       {/* Quiz Categories */}
@@ -80,25 +75,20 @@ export default function QuizLandingScreen({ navigation }) {
           onPress={() => handleStartQuiz(category.id)}
           activeOpacity={0.8}
         >
-          <LinearGradient
-            colors={category.color}
-            style={styles.categoryGradient}
-          >
-            <View style={styles.categoryContent}>
-              <Text style={styles.categoryEmoji}>{category.emoji}</Text>
-              <View style={styles.categoryTextContainer}>
-                <Text style={styles.categoryTitle}>{category.title}</Text>
-                <Text style={styles.categoryDescription} numberOfLines={2}>
-                  {category.description}
-                </Text>
-              </View>
-              
-              {/* START Button on Right */}
-              <View style={styles.startBadge}>
-                <Text style={styles.startBadgeText}>Start →</Text>
-              </View>
+          <View style={styles.categoryContent}>
+            <Text style={styles.categoryEmoji}>{category.emoji}</Text>
+            <View style={styles.categoryTextContainer}>
+              <Text style={styles.categoryTitle} numberOfLines={1}>{category.title}</Text>
+              <Text style={styles.categoryDescription} numberOfLines={2}>
+                {category.description}
+              </Text>
             </View>
-          </LinearGradient>
+            
+            {/* START Button on Right - Green background */}
+            <View style={styles.startBadge}>
+              <Text style={styles.startBadgeText}>Start →</Text>
+            </View>
+          </View>
         </TouchableOpacity>
       ))}
 
@@ -118,28 +108,30 @@ export default function QuizLandingScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.BACKGROUND,
+    backgroundColor: '#FFFFFF',
   },
   discoverCard: {
     marginHorizontal: 16,
     marginTop: 16,
     marginBottom: 20,
     borderRadius: 20,
-    overflow: 'hidden',
-    elevation: 6,
-    shadowColor: '#667eea',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     minHeight: 180,
   },
-  discoverGradient: {
+  discoverContent: {
     padding: 24,
     flexDirection: 'row',
     alignItems: 'flex-start',
     minHeight: 160,
   },
-  targetIcon: {
+  discoverIcon: {
     fontSize: 52,
     marginRight: 16,
   },
@@ -150,26 +142,28 @@ const styles = StyleSheet.create({
   discoverTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: '#000000',
     marginBottom: 8,
     lineHeight: 26,
   },
   tagContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    backgroundColor: '#F3F4F6',
     paddingVertical: 4,
     paddingHorizontal: 12,
     borderRadius: 12,
     alignSelf: 'flex-start',
     marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
   tagText: {
-    color: '#FFF',
+    color: '#000000',
     fontSize: 11,
     fontWeight: '600',
   },
   discoverDescription: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.95)',
+    color: '#000000',
     lineHeight: 20,
   },
   rightIconsContainer: {
@@ -184,52 +178,53 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginBottom: 20,
     borderRadius: 20,
-    overflow: 'hidden',
-    elevation: 6,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     minHeight: 160,
-  },
-  categoryGradient: {
-    padding: 24,
-    minHeight: 160,
-    justifyContent: 'center',
   },
   categoryContent: {
+    padding: 24,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    minHeight: 160,
   },
   categoryEmoji: {
-    fontSize: 56,
-    marginRight: 20,
+    fontSize: 48,
+    marginRight: 16,
   },
   categoryTextContainer: {
     flex: 1,
     paddingRight: 12,
+    minWidth: 0,
   },
   categoryTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: '#000000',
     marginBottom: 8,
-    flexWrap: 'nowrap',
+    flexShrink: 0,
   },
   categoryDescription: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.95)',
+    color: '#000000',
     lineHeight: 20,
   },
   startBadge: {
-    backgroundColor: 'rgba(255, 255, 255, 0.98)',
+    backgroundColor: '#20C997',
     paddingVertical: 10,
-    paddingHorizontal: 16,
+    paddingHorizontal: 14,
     borderRadius: 16,
+    flexShrink: 0,
   },
   startBadgeText: {
-    color: '#1A202C',
+    color: '#000000',
     fontSize: 14,
     fontWeight: 'bold',
   },
@@ -237,12 +232,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginVertical: 24,
     paddingVertical: 16,
-    backgroundColor: Colors.PRIMARY,
+    backgroundColor: '#20C997',
     borderRadius: 12,
     alignItems: 'center',
   },
   continueButtonText: {
-    color: '#FFF',
+    color: '#000000',
     fontSize: 16,
     fontWeight: '600',
   },

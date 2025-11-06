@@ -27,8 +27,8 @@ export default function AddGoalScreen({ navigation }) {
     try {
       const goal = {
         title: title.trim(),
-        description: description.trim(),
-        category: category,
+        description: description.trim() || title.trim(),
+        category: 'Custom Goals',
         createdAt: new Date(),
       };
 
@@ -48,13 +48,13 @@ export default function AddGoalScreen({ navigation }) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Add New Habit</Text>
+        <Text style={styles.title}>Add Custom Goal</Text>
         
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>Title *</Text>
+          <Text style={styles.label}>Goal Title *</Text>
           <TextInput
             style={styles.input}
-            placeholder="Enter habit title"
+            placeholder="Enter your custom goal"
             value={title}
             onChangeText={setTitle}
           />
@@ -82,7 +82,7 @@ export default function AddGoalScreen({ navigation }) {
             style={styles.buttonGradient}
           >
             <Text style={styles.buttonText}>
-              {isLoading ? 'Saving...' : 'Save Habit'}
+              {isLoading ? 'Saving...' : 'Save Goal'}
             </Text>
           </LinearGradient>
         </TouchableOpacity>

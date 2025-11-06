@@ -1953,12 +1953,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   reminderDescriptionContainer: {
-    backgroundColor: '#F0FDF4',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 12,
     marginBottom: 12,
     borderWidth: 2,
-    borderColor: '#20C997',
+    borderColor: '#FFFFFF',
     overflow: 'visible',
   },
   reminderDescriptionTitle: {

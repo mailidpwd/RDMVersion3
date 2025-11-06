@@ -4,12 +4,9 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Image,
   Dimensions,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { UserSessionService } from '../services/UserSessionService';
-import { Colors } from '../constants/Colors';
 
 const { width } = Dimensions.get('window');
 
@@ -30,57 +27,52 @@ export default function LeadershipIntroScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={['#4FD1C7', '#20C997']}
-        style={styles.gradient}
-      >
-        <View style={styles.content}>
-          {/* Icon with growth bars */}
-          <View style={styles.iconContainer}>
-            <View style={styles.barContainer}>
-              <View style={[styles.bar, styles.bar1]} />
-              <View style={[styles.bar, styles.bar2]} />
-              <View style={[styles.bar, styles.bar3]} />
-            </View>
+      <View style={styles.content}>
+        {/* Icon with growth bars */}
+        <View style={styles.iconContainer}>
+          <View style={styles.barContainer}>
+            <View style={[styles.bar, styles.bar1]} />
+            <View style={[styles.bar, styles.bar2]} />
+            <View style={[styles.bar, styles.bar3]} />
           </View>
+        </View>
 
-          {/* Title */}
-          <Text style={styles.title}>Discover your Leadership Profile</Text>
+        {/* Title */}
+        <Text style={styles.title}>Discover your Leadership Profile</Text>
 
-          {/* Quote Box */}
-          <View style={styles.quoteBox}>
-            <Text style={styles.quoteText}>
-              "The greatest tragedy in life is not failure, but settling for mediocrity when greatness lies within your reach. Every moment you delay discovering your true leadership potential is a moment stolen from your destiny."
-            </Text>
-          </View>
-
-          {/* Quiz Intro */}
-          <Text style={styles.quizIntro}>
-            Take a quick quiz across Leadership, Purposefulness, and Empathy/Philanthropy.
+        {/* Quote Box */}
+        <View style={styles.quoteBox}>
+          <Text style={styles.quoteText}>
+            "The greatest tragedy in life is not failure, but settling for mediocrity when greatness lies within your reach. Every moment you delay discovering your true leadership potential is a moment stolen from your destiny."
           </Text>
-
-          {/* Quiz Details Label */}
-          <View style={styles.detailsLabel}>
-            <Text style={styles.detailsText}>10 thoughtful questions per category</Text>
-          </View>
-
-          {/* Start Button - White with green text */}
-          <TouchableOpacity style={styles.startButton} onPress={handleContinue}>
-            <Text style={styles.startButtonText}>Unlock Your Leadership Potential</Text>
-          </TouchableOpacity>
-
-          {/* Maybe Later */}
-          <TouchableOpacity onPress={handleSkip} style={styles.skipButton}>
-            <Text style={styles.skipText}>Maybe later</Text>
-          </TouchableOpacity>
         </View>
 
-        {/* Footer */}
-        <View style={styles.footer}>
-          <Text style={styles.footerIcon}>💡</Text>
-          <Text style={styles.footerText}>Join thousands who discovered their leadership strengths</Text>
+        {/* Quiz Intro */}
+        <Text style={styles.quizIntro}>
+          Take a quick quiz across Leadership, Purposefulness, and Empathy/Philanthropy.
+        </Text>
+
+        {/* Quiz Details Label */}
+        <View style={styles.detailsLabel}>
+          <Text style={styles.detailsText}>10 thoughtful questions per category</Text>
         </View>
-      </LinearGradient>
+
+        {/* Start Button - White with green text */}
+        <TouchableOpacity style={styles.startButton} onPress={handleContinue}>
+          <Text style={styles.startButtonText}>Unlock Your Leadership Potential</Text>
+        </TouchableOpacity>
+
+        {/* Maybe Later */}
+        <TouchableOpacity onPress={handleSkip} style={styles.skipButton}>
+          <Text style={styles.skipText}>Maybe later</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Footer */}
+      <View style={styles.footer}>
+        <Text style={styles.footerIcon}>💡</Text>
+        <Text style={styles.footerText}>Join thousands who discovered their leadership strengths</Text>
+      </View>
     </View>
   );
 }
@@ -88,10 +80,7 @@ export default function LeadershipIntroScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
-  gradient: {
-    flex: 1,
+    backgroundColor: '#FFFFFF',
   },
   content: {
     flex: 1,
@@ -103,11 +92,13 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 64,
     height: 64,
-    backgroundColor: '#20C997',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 24,
+    borderWidth: 2,
+    borderColor: '#E5E7EB',
   },
   barContainer: {
     flexDirection: 'row',
@@ -117,7 +108,7 @@ const styles = StyleSheet.create({
   },
   bar: {
     width: 12,
-    backgroundColor: '#FFF',
+    backgroundColor: '#20C997',
     borderRadius: 6,
   },
   bar1: {
@@ -132,43 +123,49 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: '#000000',
     textAlign: 'center',
     marginBottom: 24,
   },
   quoteBox: {
-    backgroundColor: 'rgba(79, 209, 199, 0.3)',
+    backgroundColor: '#F8F9FA',
     borderRadius: 16,
     padding: 20,
     marginBottom: 16,
     width: '100%',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
   quoteText: {
     fontSize: 14,
     fontStyle: 'italic',
-    color: '#FFF',
+    color: '#000000',
     textAlign: 'center',
     lineHeight: 22,
   },
   quizIntro: {
     fontSize: 16,
-    color: '#FFF',
+    color: '#000000',
     textAlign: 'center',
     marginBottom: 12,
+    fontWeight: '500',
   },
   detailsLabel: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: '#F0FDF4',
     borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 16,
     marginBottom: 32,
+    borderWidth: 1,
+    borderColor: '#D1FAE5',
   },
   detailsText: {
     fontSize: 12,
-    color: '#FFF',
+    color: '#000000',
+    fontWeight: '500',
   },
   startButton: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     paddingVertical: 18,
     paddingHorizontal: 32,
@@ -179,6 +176,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
+    borderWidth: 2,
+    borderColor: '#20C997',
   },
   startButtonText: {
     color: '#20C997',
@@ -190,9 +189,9 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   skipText: {
-    color: '#FFF',
+    color: '#000000',
     fontSize: 14,
-    opacity: 0.9,
+    opacity: 0.7,
   },
   footer: {
     flexDirection: 'row',
@@ -207,8 +206,8 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 12,
-    color: '#FFF',
-    opacity: 0.8,
+    color: '#000000',
+    opacity: 0.7,
   },
 });
 

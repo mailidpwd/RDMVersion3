@@ -29,6 +29,7 @@ import MoodHabitRecommendationsModal from '../components/MoodHabitRecommendation
 import MorningBundleModal from '../components/MorningBundleModal';
 import AfternoonBundleModal from '../components/AfternoonBundleModal';
 import EveningBundleModal from '../components/EveningBundleModal';
+import AuthService from '../services/AuthService';
 
 export default function DashboardScreen({ navigation }) {
   const handleCheckScore = async () => {
@@ -88,12 +89,59 @@ export default function DashboardScreen({ navigation }) {
   const [portfolioValue, setPortfolioValue] = useState(100.00);
   const [portfolioCurrency, setPortfolioCurrency] = useState('USDT'); // USDT or RDM
 
+  // Profile modal state
+  const [showProfileModal, setShowProfileModal] = useState(false);
+
+  // More Purses dropdown state
+  const [showMorePurses, setShowMorePurses] = useState(false);
+
   // Load water tracking data
   const loadWaterData = async () => {
     const glasses = await WaterTrackingService.getGlassesCount();
     setWaterGlasses(glasses);
     const isComplete = await WaterTrackingService.isGoalComplete();
     setCheckedGoals(prev => ({ ...prev, water: isComplete }));
+  };
+
+  // Handle logout
+  const handleLogout = async () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        { 
+          text: 'Cancel', 
+          style: 'cancel',
+          onPress: () => setShowProfileModal(false)
+        },
+        {
+          text: 'Logout',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              console.log('👋 Logging out user...');
+              
+              // Clear user session first
+              await UserSessionService.logout();
+              
+              // Sign out using AuthService
+              await AuthService.signOut();
+              
+              // Navigate to login screen
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'Login' }],
+              });
+              
+              console.log('✅ Logout successful');
+            } catch (error) {
+              console.error('❌ Logout error:', error);
+              Alert.alert('Error', 'Failed to logout. Please try again.');
+            }
+          },
+        },
+      ]
+    );
   };
 
   // Handle water goal click - open modal
@@ -442,28 +490,24 @@ export default function DashboardScreen({ navigation }) {
       console.log('   Mood habits list:', moodHabits);
       
       // 3. Load CONFIGURED habits (from Quiz Hub → ActionPicker → GoalConfigurationScreen)
+      // EXCLUDE Custom Habits - they should only appear in Additional Habits page
       const configuredHabits = userGoals.filter(goal => 
         goal.category && 
         goal.category !== 'Mood Assessment' &&
-        goal.category !== 'Custom Habits' // Filter out this category, will add to custom section
+        goal.category !== 'Custom Habits' &&
+        goal.category !== 'Custom' &&
+        goal.category !== 'Custom Goals'
       );
-      
-      // 4. Load Custom Habits (from Dashboard → ActionPicker)
-      const customHabits = userGoals.filter(goal => 
-        goal.category === 'Custom Habits' || 
-        goal.category === 'Custom'
-      );
-      
-      // Combine configured and custom habits
-      const allConfiguredHabits = [...configuredHabits, ...customHabits];
       
       console.log('✅ Loaded CONFIGURED habits:', configuredHabits.length);
-      console.log('✅ Loaded CUSTOM habits:', customHabits.length);
       console.log('   Configured habits:', configuredHabits);
-      console.log('   Custom habits:', customHabits);
       
-      // Combine all types: mood habits + configured habits + custom habits
-      const allHabits = [...moodHabits, ...allConfiguredHabits];
+      // NOTE: Custom Habits are NOT loaded here - they are separate and only shown in Additional Habits page
+      // Main habits section only shows: 2-min Meditate, 5k Steps, No Sugar (hardcoded)
+      // Plus any configured habits from Quiz Hub flow
+      
+      // Combine only mood habits + configured habits (NO custom habits)
+      const allHabits = [...moodHabits, ...configuredHabits];
       
       console.log('📋 Total habits to display:', allHabits.length);
       console.log('   Final habits list:', allHabits.map(h => h.title || h.description));
@@ -739,7 +783,10 @@ export default function DashboardScreen({ navigation }) {
           
           {/* Right Side - Icons */}
           <View style={styles.headerRight}>
-            <TouchableOpacity style={styles.headerIconButton}>
+            <TouchableOpacity 
+              style={styles.headerIconButton}
+              onPress={() => setShowProfileModal(true)}
+            >
               <Ionicons name="person-outline" size={24} color="#FFFFFF" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.headerIconButton}>
@@ -913,14 +960,11 @@ export default function DashboardScreen({ navigation }) {
             </View>
 
             {/* Portfolio - Right Card - Clean Simple Design */}
-            <LinearGradient
-              colors={['#20C997', '#17A085', '#14B8A6']}
-              style={styles.portfolioCard}
-            >
+            <View style={styles.portfolioCard}>
               {/* Top Row: Folder Icon & Toggle */}
               <View style={styles.portfolioHeader}>
                 <View style={styles.portfolioIconCircle}>
-                  <Ionicons name="folder-outline" size={20} color="#FFFFFF" />
+                  <Ionicons name="folder-outline" size={20} color="#20C997" />
                 </View>
                 
                 <TouchableOpacity 
@@ -949,7 +993,7 @@ export default function DashboardScreen({ navigation }) {
                   {portfolioCurrency}
                 </Text>
               </View>
-            </LinearGradient>
+            </View>
           </View>
 
           {/* Leadership Score - Enhanced Interactive */}
@@ -1026,13 +1070,13 @@ export default function DashboardScreen({ navigation }) {
               <TouchableOpacity 
                 style={styles.customButtonEnhanced}
                 activeOpacity={0.7}
-                onPress={() => navigation.navigate('CustomHabits')}
+                onPress={() => navigation.navigate('AdditionalGoals')}
               >
                 <View style={styles.customButtonLeft}>
                   <View style={[styles.iconCircleCustom, { backgroundColor: '#F0FDF9', borderColor: 'rgba(32, 201, 151, 0.3)' }]}>
                     <Ionicons name="add-circle" size={20} color="#20C997" />
                   </View>
-                  <Text style={styles.customButtonText}>Custom Goals</Text>
+                  <Text style={styles.customButtonText}>Additional Goals</Text>
                 </View>
                 <Ionicons name="arrow-forward-circle" size={20} color="#20C997" />
               </TouchableOpacity>
@@ -1091,13 +1135,13 @@ export default function DashboardScreen({ navigation }) {
               <TouchableOpacity 
                 style={styles.customButtonEnhanced}
                 activeOpacity={0.7}
-                onPress={() => navigation.navigate('CustomHabits')}
+                onPress={() => navigation.navigate('AdditionalHabits')}
               >
                 <View style={styles.customButtonLeft}>
                   <View style={[styles.iconCircleCustom, { backgroundColor: '#F3E8FF', borderColor: 'rgba(139, 92, 246, 0.3)' }]}>
                     <Ionicons name="add-circle" size={20} color="#8B5CF6" />
                   </View>
-                  <Text style={styles.customButtonText}>Custom Habits</Text>
+                  <Text style={styles.customButtonText}>Additional Habits</Text>
                 </View>
                 <Ionicons name="arrow-forward-circle" size={20} color="#8B5CF6" />
               </TouchableOpacity>
@@ -1112,54 +1156,95 @@ export default function DashboardScreen({ navigation }) {
             <Text style={styles.sectionTitleEnhanced}>Wallets & Charity</Text>
           </View>
           
-          {/* Wallet Cards - Outline Style */}
-          <TouchableOpacity style={[styles.walletCardOutline, { borderColor: '#20C997' }]} activeOpacity={0.8}>
-            <View style={styles.walletHeader}>
-              <View style={styles.walletIconCircle}>
-                <Text style={styles.walletEmojiLarge}>💎</Text>
+          {/* Base Purse Card */}
+          <View style={styles.basePurseCard}>
+            <View style={styles.basePurseLeft}>
+              <Ionicons name="wallet-outline" size={40} color="#20C997" />
+              <View style={styles.basePurseText}>
+                <Text style={styles.basePurseAmount}>100.00</Text>
+                <Text style={styles.basePurseLabel}>BASE PURSE</Text>
               </View>
-              <View style={styles.walletInfo}>
-                <Text style={[styles.walletTitleOutline, { color: '#20C997' }]}>Reward Wallet</Text>
-                <Text style={styles.walletBalanceOutline}>Balance: 150 RDM</Text>
-              </View>
-              <TouchableOpacity style={[styles.walletMoreButtonOutline, { backgroundColor: '#20C997' }]}>
-                <Text style={styles.walletMoreTextOutline}>More</Text>
-                <Ionicons name="chevron-forward" size={12} color="#FFFFFF" />
+            </View>
+            <View style={styles.basePurseButtons}>
+              <TouchableOpacity style={styles.topUpButton}>
+                <Ionicons name="add" size={16} color="#FFF" />
+                <Text style={styles.topUpText}>Top Up</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.withdrawButton}>
+                <Ionicons name="chevron-down" size={16} color="#000000" />
+                <Text style={styles.withdrawText}>Withdraw</Text>
               </TouchableOpacity>
             </View>
+          </View>
+
+          {/* More Purses Dropdown */}
+          <TouchableOpacity 
+            style={styles.morePursesHeader}
+            onPress={() => setShowMorePurses(!showMorePurses)}
+            activeOpacity={0.7}
+          >
+            <View style={styles.morePursesHeaderLeft}>
+              <Ionicons name="wallet" size={20} color="#20C997" />
+              <Text style={styles.morePursesTitle}>More Purses</Text>
+            </View>
+            <Ionicons 
+              name={showMorePurses ? "chevron-up" : "chevron-down"} 
+              size={20} 
+              color="#64748B" 
+            />
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.walletCardOutline, { borderColor: '#FFA726' }]} activeOpacity={0.8}>
-            <View style={styles.walletHeader}>
-              <View style={styles.walletIconCircle}>
-                <Text style={styles.walletEmojiLarge}>🤔</Text>
-              </View>
-              <View style={styles.walletInfo}>
-                <Text style={[styles.walletTitleOutline, { color: '#FFA726' }]}>Remorse Wallet</Text>
-                <Text style={styles.walletBalanceOutline}>Balance: 35 RDM</Text>
-              </View>
-              <TouchableOpacity style={[styles.walletMoreButtonOutline, { backgroundColor: '#FFA726' }]}>
-                <Text style={styles.walletMoreTextOutline}>More</Text>
-                <Ionicons name="chevron-forward" size={12} color="#FFFFFF" />
+          {showMorePurses && (
+            <View style={styles.morePursesContent}>
+              <TouchableOpacity style={[styles.walletCardOutline, { borderColor: '#20C997' }]} activeOpacity={0.8}>
+                <View style={styles.walletHeader}>
+                  <View style={styles.walletIconCircle}>
+                    <Text style={styles.walletEmojiLarge}>💎</Text>
+                  </View>
+                  <View style={styles.walletInfo}>
+                    <Text style={[styles.walletTitleOutline, { color: '#000000' }]}>Reward Purse</Text>
+                    <Text style={styles.walletBalanceOutline}>Balance: 150 RDM</Text>
+                  </View>
+                  <TouchableOpacity style={[styles.walletMoreButtonOutline, { backgroundColor: '#20C997' }]}>
+                    <Text style={styles.walletMoreTextOutline}>More</Text>
+                    <Ionicons name="chevron-forward" size={12} color="#FFFFFF" />
+                  </TouchableOpacity>
+                </View>
               </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.walletCardOutline, { borderColor: '#6366F1' }]} activeOpacity={0.8}>
-            <View style={styles.walletHeader}>
-              <View style={styles.walletIconCircle}>
-                <Text style={styles.walletEmojiLarge}>❤️</Text>
-              </View>
-              <View style={styles.walletInfo}>
-                <Text style={[styles.walletTitleOutline, { color: '#6366F1' }]}>Charity Wallet</Text>
-                <Text style={styles.walletBalanceOutline}>Donated: 60 RDM</Text>
-              </View>
-              <TouchableOpacity style={[styles.walletMoreButtonOutline, { backgroundColor: '#6366F1' }]}>
-                <Text style={styles.walletMoreTextOutline}>More</Text>
-                <Ionicons name="chevron-forward" size={12} color="#FFFFFF" />
+              <TouchableOpacity style={[styles.walletCardOutline, { borderColor: '#FFA726' }]} activeOpacity={0.8}>
+                <View style={styles.walletHeader}>
+                  <View style={styles.walletIconCircle}>
+                    <Text style={styles.walletEmojiLarge}>🤔</Text>
+                  </View>
+                  <View style={styles.walletInfo}>
+                    <Text style={[styles.walletTitleOutline, { color: '#000000' }]}>Remorse Purse</Text>
+                    <Text style={styles.walletBalanceOutline}>Balance: 35 RDM</Text>
+                  </View>
+                  <TouchableOpacity style={[styles.walletMoreButtonOutline, { backgroundColor: '#FFA726' }]}>
+                    <Text style={styles.walletMoreTextOutline}>More</Text>
+                    <Ionicons name="chevron-forward" size={12} color="#FFFFFF" />
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={[styles.walletCardOutline, { borderColor: '#6366F1' }]} activeOpacity={0.8}>
+                <View style={styles.walletHeader}>
+                  <View style={styles.walletIconCircle}>
+                    <Text style={styles.walletEmojiLarge}>❤️</Text>
+                  </View>
+                  <View style={styles.walletInfo}>
+                    <Text style={[styles.walletTitleOutline, { color: '#000000' }]}>Charity Purse</Text>
+                    <Text style={styles.walletBalanceOutline}>Donated: 60 RDM</Text>
+                  </View>
+                  <TouchableOpacity style={[styles.walletMoreButtonOutline, { backgroundColor: '#6366F1' }]}>
+                    <Text style={styles.walletMoreTextOutline}>More</Text>
+                    <Ionicons name="chevron-forward" size={12} color="#FFFFFF" />
+                  </TouchableOpacity>
+                </View>
               </TouchableOpacity>
             </View>
-          </TouchableOpacity>
+          )}
 
           {/* Charity Impact - Enhanced */}
           <View style={styles.charityImpactEnhanced}>
@@ -1389,9 +1474,89 @@ export default function DashboardScreen({ navigation }) {
           </View>
         </View>
       </Modal>
+
+      {/* Profile Modal */}
+      <ProfileModal
+        visible={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+        onLogout={handleLogout}
+        onProfile={() => {
+          setShowProfileModal(false);
+          navigation.navigate('Profile');
+        }}
+      />
     </View>
   );
 }
+
+// Profile Modal Component
+const ProfileModal = ({ visible, onClose, onLogout, onProfile }) => {
+  return (
+    <Modal
+      visible={visible}
+      transparent={true}
+      animationType="fade"
+      onRequestClose={onClose}
+    >
+      <TouchableOpacity 
+        style={styles.profileModalOverlay} 
+        activeOpacity={1} 
+        onPress={onClose}
+      >
+        <TouchableOpacity 
+          style={styles.profileModalContainer} 
+          activeOpacity={1}
+        >
+          {/* Close Button */}
+          <TouchableOpacity 
+            style={styles.profileModalCloseButton}
+            onPress={onClose}
+          >
+            <Ionicons name="close-circle" size={28} color="#CBD5E0" />
+          </TouchableOpacity>
+
+          {/* Header */}
+          <View style={styles.profileModalHeader}>
+            <View style={styles.profileModalIconContainer}>
+              <Ionicons name="person-circle" size={32} color="#20C997" />
+            </View>
+            <Text style={styles.profileModalTitle}>Profile</Text>
+            <Text style={styles.profileModalSubtitle}>
+              Manage your account settings
+            </Text>
+          </View>
+
+          {/* Menu Items */}
+          <View style={styles.profileModalActions}>
+            <TouchableOpacity 
+              style={styles.profileModalMenuItem}
+              onPress={onProfile}
+              activeOpacity={0.8}
+            >
+              <View style={styles.profileModalMenuItemLeft}>
+                <View style={styles.profileModalMenuIconContainer}>
+                  <Ionicons name="person-outline" size={24} color="#20C997" />
+                </View>
+                <Text style={styles.profileModalMenuText}>View Profile</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color="#CBD5E0" />
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.profileModalLogoutButton} 
+              onPress={onLogout}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="log-out-outline" size={24} color="#EF4444" />
+              <Text style={styles.profileModalLogoutText}>Logout</Text>
+            </TouchableOpacity>
+          </View>
+
+        </TouchableOpacity>
+      </TouchableOpacity>
+    </Modal>
+  );
+};
 
 // Habit Options Modal Component
 const HabitOptionsModal = ({ visible, habit, onModify, onDelete, onClose }) => {
@@ -2476,16 +2641,18 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   withdrawButton: {
-    backgroundColor: '#D0D0D0',
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
   withdrawText: {
-    color: '#FFF',
+    color: '#000000',
     fontSize: 12,
     fontWeight: '500',
   },
@@ -2936,6 +3103,108 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginTop: 0,
   },
+  // Profile Modal Styles
+  profileModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileModalContainer: {
+    backgroundColor: '#FFF',
+    borderRadius: 20,
+    padding: 20,
+    width: '75%',
+    maxWidth: 320,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 20 },
+    shadowOpacity: 0.25,
+    shadowRadius: 30,
+    elevation: 20,
+    position: 'relative',
+  },
+  profileModalCloseButton: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    zIndex: 10,
+  },
+  profileModalHeader: {
+    alignItems: 'center',
+    marginBottom: 20,
+    marginTop: 8,
+  },
+  profileModalIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#F0FDF4',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  profileModalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1A202C',
+    marginBottom: 6,
+  },
+  profileModalSubtitle: {
+    fontSize: 13,
+    color: '#718096',
+    textAlign: 'center',
+    lineHeight: 18,
+  },
+  profileModalActions: {
+    gap: 12,
+  },
+  profileModalMenuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#F8F9FA',
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  profileModalMenuItemLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  profileModalMenuIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: '#E6FFF9',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  profileModalMenuText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#2D3748',
+    flex: 1,
+  },
+  profileModalLogoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFF',
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: '#FEE2E2',
+    gap: 8,
+    marginTop: 4,
+  },
+  profileModalLogoutText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#EF4444',
+  },
   // Make your own AI custom Habit button styles
   makeOwnHabitButtonWrapper: {
     marginTop: 16,
@@ -3203,14 +3472,17 @@ const styles = StyleSheet.create({
   portfolioCard: {
     flex: 0.40,
     height: 135,
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     padding: 14,
-    shadowColor: '#20C997',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 3,
     justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
   portfolioHeader: {
     flexDirection: 'row',
@@ -3222,35 +3494,37 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: '#F0FDF4',
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.4)',
+    borderColor: '#C6F6D5',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
   },
   portfolioToggle: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(255,255,255,0.25)',
+    backgroundColor: '#F3F4F6',
     borderRadius: 10,
     padding: 2,
     alignItems: 'center',
     gap: 2,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
   portfolioToggleOption: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     fontSize: 9.5,
     fontWeight: '700',
-    color: 'rgba(255,255,255,0.85)',
+    color: '#64748B',
     letterSpacing: 0.2,
     borderRadius: 8,
     minWidth: 36,
     textAlign: 'center',
   },
   portfolioToggleOptionActive: {
-    backgroundColor: '#FFFFFF',
-    color: '#20C997',
+    backgroundColor: '#20C997',
+    color: '#FFFFFF',
   },
   portfolioContent: {
     flex: 1,
@@ -3261,21 +3535,21 @@ const styles = StyleSheet.create({
   portfolioLabel: {
     fontSize: 11,
     fontWeight: '800',
-    color: 'rgba(255,255,255,0.95)',
+    color: '#64748B',
     letterSpacing: 1.3,
     marginBottom: 8,
   },
   portfolioValue: {
     fontSize: 28,
     fontWeight: '900',
-    color: '#FFFFFF',
+    color: '#000000',
     letterSpacing: -1.2,
     lineHeight: 32,
   },
   portfolioCurrency: {
     fontSize: 10.5,
     fontWeight: '700',
-    color: 'rgba(255,255,255,0.85)',
+    color: '#64748B',
     marginTop: 3,
     letterSpacing: 0.3,
   },
@@ -3641,6 +3915,36 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     color: '#FFF',
+  },
+  // More Purses Dropdown Styles
+  morePursesHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    padding: 14,
+    borderRadius: 12,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  morePursesHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  morePursesTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#1A202C',
+  },
+  morePursesContent: {
+    marginBottom: 10,
   },
   // Outline Wallet Cards
   walletCardOutline: {

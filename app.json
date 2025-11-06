@@ -37,6 +37,10 @@
         "projectId": "9e362ade-1f62-4e79-a7a1-63d25dcaece3"
       }
     },
+    "updates": {
+      "enabled": false,
+      "fallbackToCacheTimeout": 0
+    },
     "owner": "audacad"
   }
 }
