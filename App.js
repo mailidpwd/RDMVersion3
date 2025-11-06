@@ -23,6 +23,8 @@ import DonateScreen from './src/screens/DonateScreen';
 import MedaaAIScreen from './src/screens/MedaaAIScreen';
 import AddCustomHabitScreen from './src/screens/AddCustomHabitScreen';
 import CustomHabitsScreen from './src/screens/CustomHabitsScreen';
+import AdditionalGoalsScreen from './src/screens/AdditionalGoalsScreen';
+import AdditionalHabitsScreen from './src/screens/AdditionalHabitsScreen';
 
 import { UserSessionService } from './src/services/UserSessionService';
 
@@ -190,6 +192,16 @@ function App() {
         <Stack.Screen 
           name="CustomHabits" 
           component={CustomHabitsScreen} 
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen 
+          name="AdditionalGoals" 
+          component={AdditionalGoalsScreen} 
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen 
+          name="AdditionalHabits" 
+          component={AdditionalHabitsScreen} 
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

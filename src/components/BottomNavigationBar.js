@@ -179,6 +179,8 @@ export default function BottomNavigationBar({ navigation, currentRoute, isVisibl
       
       const routeMap = {
         'Dashboard': 'Goals',
+        'AdditionalGoals': 'Goals',
+        'AdditionalHabits': 'Reflect',
         'Transfer': 'Transfer',
         'Donate': 'Donate',
         'MedaaAI': 'MedaaAI',
@@ -255,7 +257,7 @@ export default function BottomNavigationBar({ navigation, currentRoute, isVisibl
       icon: 'flag',
       iconColor: '#20C997',
       bgColor: '#E6FAF5',
-      route: 'Dashboard' 
+      route: 'AdditionalGoals' 
     },
     { 
       id: 'Transfer', 
@@ -279,7 +281,7 @@ export default function BottomNavigationBar({ navigation, currentRoute, isVisibl
       icon: 'compass',
       iconColor: '#FFC107',
       bgColor: '#FFF9C4',
-      route: 'Dashboard' 
+      route: 'AdditionalHabits' 
     },
     { 
       id: 'MedaaAI', 

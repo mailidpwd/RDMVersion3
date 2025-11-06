@@ -56,6 +56,7 @@ export default function ActionPickerScreen({ navigation, route }) {
   const [showConfiguration, setShowConfiguration] = useState(false);
   const [filteredHabits, setFilteredHabits] = useState([]);
   const [showWeakAreaMessage, setShowWeakAreaMessage] = useState(false);
+  const [currentCategory, setCurrentCategory] = useState(selectedCategory || 'Mindfulness');
 
   useEffect(() => {
     loadHabits();
@@ -123,6 +124,10 @@ export default function ActionPickerScreen({ navigation, route }) {
 
   const handleContinue = () => {
     if (selectedHabits.length >= 1) {
+      // Get category from first selected habit if available, otherwise use selectedCategory
+      const firstSelectedHabit = filteredHabits.find(h => selectedHabits.includes(h.title));
+      const habitCategory = firstSelectedHabit?.category || selectedCategory || 'Mindfulness';
+      setCurrentCategory(habitCategory);
       setShowConfiguration(true);
     } else {
       Alert.alert('Select Habit', 'Please select at least 1 habit to continue.');
@@ -290,7 +295,7 @@ export default function ActionPickerScreen({ navigation, route }) {
               navigation.replace(route, params);
             },
           }}
-          route={{ params: { selectedHabits } }}
+          route={{ params: { selectedHabits, selectedCategory: currentCategory } }}
         />
       )}
     </View>

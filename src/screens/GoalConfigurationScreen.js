@@ -23,6 +23,7 @@ function uuidv4() {
 
 export default function GoalConfigurationScreen({ route, navigation }) {
   const selectedHabits = route.params?.selectedHabits || [];
+  const selectedCategory = route.params?.selectedCategory || 'Mindfulness';
   
   const [currentHabitIndex, setCurrentHabitIndex] = useState(0);
   const [activityFrequency, setActivityFrequency] = useState('Daily');
@@ -42,6 +43,7 @@ export default function GoalConfigurationScreen({ route, navigation }) {
     try {
       console.log('💾 Saving habit configuration...');
       console.log('   Habit:', currentHabit);
+      console.log('   Category:', selectedCategory);
       console.log('   Frequency:', activityFrequency);
       console.log('   Reflections:', reflections);
       
@@ -51,13 +53,13 @@ export default function GoalConfigurationScreen({ route, navigation }) {
         return;
       }
 
-      // Save current habit configuration
+      // Save current habit configuration with Quiz Hub category (long-term habits)
       const goal = {
         id: `goal_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         title: currentHabit,
         habitName: currentHabit,
         description: currentHabit,
-        category: 'Custom Habits', // Changed to match Dashboard filter
+        category: selectedCategory, // Use Quiz Hub category (Mindfulness, Purposefulness, etc.)
         subcategory: 'User Selected',
         activityFrequency: activityFrequency, // Match dashboard field name
         reflections: reflections, // Match dashboard field name

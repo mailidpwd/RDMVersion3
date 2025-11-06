@@ -42,16 +42,25 @@ export default function CustomHabitsScreen({ navigation }) {
     try {
       const userGoals = await GoalsService.getUserGoals();
       
-      // Get ALL habits (mood habits, configured habits, and custom habits)
-      const allHabits = userGoals.filter(goal => 
-        goal.category === 'Mood Assessment' || 
-        goal.category === 'Custom Habits' ||
-        goal.category === 'Custom' ||
-        (goal.category && goal.category !== '')
-      );
+      // Get ONLY long-term habits from Quiz Hub flow (ActionPicker → GoalConfigurationScreen)
+      // Exclude dashboard "Custom Habits" - those belong to AdditionalHabitsScreen
+      const longTermHabits = userGoals.filter(goal => {
+        // Include habits from Quiz Hub categories (Mindfulness, Purposefulness, etc.)
+        const quizHubCategories = ['Mindfulness', 'Purposefulness', 'Empathy & Philanthropy', 'Empathy'];
+        if (quizHubCategories.includes(goal.category)) {
+          return true;
+        }
+        // Include Mood Assessment habits
+        if (goal.category === 'Mood Assessment') {
+          return true;
+        }
+        // EXCLUDE 'Custom Habits' category - those are for dashboard Additional Habits
+        // EXCLUDE dashboard short-term habits
+        return false;
+      });
       
-      console.log('📋 Custom Habits Screen - Loaded habits:', allHabits.length);
-      setHabits(allHabits);
+      console.log('📋 Custom Habits Screen - Loaded long-term habits:', longTermHabits.length);
+      setHabits(longTermHabits);
     } catch (error) {
       console.error('Error loading custom habits:', error);
     }
