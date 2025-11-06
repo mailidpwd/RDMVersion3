@@ -1,0 +1,164 @@
+warning: in the working copy of 'app.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package-lock.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/MorningBundleModal.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/screens/AddCustomHabitScreen.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/screens/DashboardScreen.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/screens/LeadershipIntroScreen.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/screens/QuizLandingScreen.js', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/app.json b/app.json[m
+[1mindex e4bf07c..4829412 100644[m
+[1m--- a/app.json[m
+[1m+++ b/app.json[m
+[36m@@ -37,6 +37,10 @@[m
+         "projectId": "9e362ade-1f62-4e79-a7a1-63d25dcaece3"[m
+       }[m
+     },[m
+[32m+[m[32m    "updates": {[m
+[32m+[m[32m      "enabled": false,[m
+[32m+[m[32m      "fallbackToCacheTimeout": 0[m
+[32m+[m[32m    },[m
+     "owner": "audacad"[m
+   }[m
+ }[m
+[1mdiff --git a/package-lock.json b/package-lock.json[m
+[1mindex 861cf45..d1b1d24 100644[m
+[1m--- a/package-lock.json[m
+[1m+++ b/package-lock.json[m
+[36m@@ -14,7 +14,7 @@[m
+         "@react-navigation/native-stack": "^7.6.0",[m
+         "@react-navigation/stack": "^6.4.1",[m
+         "axios": "^1.7.7",[m
+[31m-        "expo": "~54.0.0",[m
+[32m+[m[32m        "expo": "~54.0.22",[m
+         "expo-av": "^16.0.7",[m
+         "expo-blur": "^15.0.7",[m
+         "expo-linear-gradient": "~15.0.7",[m
+[36m@@ -23,17 +23,18 @@[m
+         "expo-status-bar": "~3.0.8",[m
+         "react": "19.1.0",[m
+         "react-native": "0.81.5",[m
+[31m-        "react-native-gesture-handler": "~2.20.0",[m
+[31m-        "react-native-reanimated": "~3.16.0",[m
+[32m+[m[32m        "react-native-gesture-handler": "~2.28.0",[m
+[32m+[m[32m        "react-native-reanimated": "~3.16.1",[m
+         "react-native-safe-area-context": "~5.6.0",[m
+         "react-native-screens": "~4.16.0",[m
+         "react-native-vector-icons": "^10.3.0",[m
+         "react-native-webview": "13.15.0",[m
+[32m+[m[32m        "react-native-worklets-core": "^1.6.2",[m
+         "uuid": "^13.0.0"[m
+       },[m
+       "devDependencies": {[m
+         "@babel/core": "^7.23.0",[m
+[31m-        "babel-preset-expo": "~12.0.0"[m
+[32m+[m[32m        "babel-preset-expo": "~54.0.0"[m
+       }[m
+     },[m
+     "node_modules/@0no-co/graphql.web": {[m
+[36m@@ -476,24 +477,6 @@[m
+         "node": ">=6.0.0"[m
+       }[m
+     },[m
+[31m-    "node_modules/@babel/plugin-proposal-class-properties": {[m
+[31m-      "version": "7.18.6",[m
+[31m-      "resolved": "https://registry.npmjs.org/@babel/plugin-proposal-class-properties/-/plugin-proposal-class-properties-7.18.6.tgz",[m
+[31m-      "integrity": "sha512-cumfXOF0+nzZrrN8Rf0t7M+tF6sZc7vhQwYQck9q1/5w2OExlD+b4v4RpMJFaV1Z7WcDRgO6FqvxqxGlwo+RHQ==",[m
+[31m-      "deprecated": "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-class-properties instead.",[m
+[31m-      "dev": true,[m
+[31m-      "license": "MIT",[m
+[31m-      "dependencies": {[m
+[31m-        "@babel/helper-create-class-features-plugin": "^7.18.6",[m
+[31m-        "@babel/helper-plugin-utils": "^7.18.6"[m
+[31m-      },[m
+[31m-      "engines": {[m
+[31m-        "node": ">=6.9.0"[m
+[31m-      },[m
+[31m-      "peerDependencies": {[m
+[31m-        "@babel/core": "^7.0.0-0"[m
+[31m-      }[m
+[31m-    },[m
+     "node_modules/@babel/plugin-proposal-decorators": {[m
+       "version": "7.28.0",[m
+       "resolved": "https://registry.npmjs.org/@babel/plugin-proposal-decorators/-/plugin-proposal-decorators-7.28.0.tgz",[m
+[36m@@ -526,43 +509,6 @@[m
+         "@babel/core": "^7.0.0-0"[m
+       }[m
+     },[m
+[31m-    "node_modules/@babel/plugin-proposal-nullish-coalescing-operator": {[m
+[31m-      "version": "7.18.6",[m
+[31m-      "resolved": "https://registry.npmjs.org/@babel/plugin-proposal-nullish-coalescing-operator/-/plugin-proposal-nullish-coalescing-operator-7.18.6.tgz",[m
+[31m-      "integrity": "sha512-wQxQzxYeJqHcfppzBDnm1yAY0jSRkUXR2z8RePZYrKwMKgMlE8+Z6LUno+bd6LvbGh8Gltvy74+9pIYkr+XkKA==",[m
+[31m-      "deprecated": "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-nullish-coalescing-operator instead.",[m
+[31m-      "dev": true,[m
+[31m-      "license": "MIT",[m
+[31m-      "dependencies": {[m
+[31m-        "@babel/helper-plugin-utils": "^7.18.6",[m
+[31m-        "@babel/plugin-syntax-nullish-coalescing-operator": "^7.8.3"[m
+[31m-      },[m
+[31m-      "engines": {[m
+[31m-        "node": ">=6.9.0"[m
+[31m-      },[m
+[31m-      "peerDependencies": {[m
+[31m-        "@babel/core": "^7.0.0-0"[m
+[31m-      }[m
+[31m-    },[m
+[31m-    "node_modules/@babel/plugin-proposal-optional-chaining": {[m
+[31m-      "version": "7.21.0",[m
+[31m-      "resolved": "https://registry.npmjs.org/@babel/plugin-proposal-optional-chaining/-/plugin-proposal-optional-chaining-7.21.0.tgz",[m
+[31m-      "integrity": "sha512-p4zeefM72gpmEe2fkUr/OnOXpWEf8nAgk7ZYVqqfFiyIG7oFfVZcCrU64hWn5xp4tQ9LkV4bTIa5rD0KANpKNA==",[m
+[31m-      "deprecated": "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-optional-chaining instead.",[m
+[31m-      "dev": true,[m
+[31m-      "license": "MIT",[m
+[31m-      "dependencies": {[m
+[31m-        "@babel/helper-plugin-utils": "^7.20.2",[m
+[31m-        "@babel/helper-skip-transparent-expression-wrappers": "^7.20.0",[m
+[31m-        "@babel/plugin-syntax-optional-chaining": "^7.8.3"[m
+[31m-      },[m
+[31m-      "engines": {[m
+[31m-        "node": ">=6.9.0"[m
+[31m-      },[m
+[31m-      "peerDependencies": {[m
+[31m-        "@babel/core": "^7.0.0-0"[m
+[31m-      }[m
+[31m-    },[m
+     "node_modules/@babel/plugin-syntax-async-generators": {[m
+       "version": "7.8.4",[m
+       "resolved": "https://registry.npmjs.org/@babel/plugin-syntax-async-generators/-/plugin-syntax-async-generators-7.8.4.tgz",[m
+[36m@@ -1470,24 +1416,6 @@[m
+         "@babel/core": "^7.0.0-0"[m
+       }[m
+     },[m
+[31m-    "node_modules/@babel/preset-flow": {[m
+[31m-      "version": "7.27.1",[m
+[31m-      "resolved": "https://registry.npmjs.org/@babel/preset-flow/-/preset-flow-7.27.1.tgz",[m
+[31m-      "integrity": "sha512-ez3a2it5Fn6P54W8QkbfIyyIbxlXvcxyWHHvno1Wg0Ej5eiJY5hBb8ExttoIOJJk7V2dZE6prP7iby5q2aQ0Lg==",[m
+[31m-      "dev": true,[m
+[31m-      "license": "MIT",[m
+[31m-      "dependencies": {[m
+[31m-        "@babel/helper-plugin-utils": "^7.27.1",[m
+[31m-        "@babel/helper-validator-option": "^7.27.1",[m
+[31m-        "@babel/plugin-transform-flow-strip-types": "^7.27.1"[m
+[31m-      },[m
+[31m-      "engines": {[m
+[31m-        "node": ">=6.9.0"[m
+[31m-      },[m
+[31m-      "peerDependencies": {[m
+[31m-        "@babel/core": "^7.0.0-0"[m
+[31m-      }[m
+[31m-    },[m
+     "node_modules/@babel/preset-react": {[m
+       "version": "7.28.5",[m
+       "resolved": "https://registry.npmjs.org/@babel/preset-react/-/preset-react-7.28.5.tgz",[m
+[36m@@ -1527,26 +1455,6 @@[m
+         "@babel/core": "^7.0.0-0"[m
+       }[m
+     },[m
+[31m-    "node_modules/@babel/register": {[m
+[31m-      "version": "7.28.3",[m
+[31m-      "resolved": "https://registry.npmjs.org/@babel/register/-/register-7.28.3.tgz",[m
+[31m-      "integrity": "sha512-CieDOtd8u208eI49bYl4z1J22ySFw87IGwE+IswFEExH7e3rLgKb0WNQeumnacQ1+VoDJLYI5QFA3AJZuyZQfA==",[m
+[31m-      "dev": true,[m
+[31m-      "license": "MIT",[m
+[31m-      "dependencies": {[m
+[31m-        "clo

@@ -231,20 +231,21 @@ export default function AddCustomHabitScreen({ navigation, route }) {
 
         {/* Description with AI Button */}
         <View style={styles.formGroup}>
-          <Text style={styles.label}>Description</Text>
+          <Text style={styles.label}>Description *</Text>
+          <Text style={styles.helperText}>Write your own custom habit description</Text>
           <View style={styles.descriptionContainer}>
             <TextInput
               style={styles.descriptionInput}
-              placeholder="Description"
+              placeholder="Enter your custom habit description (e.g., 'Drink 8 glasses of water daily')"
               multiline
-              numberOfLines={3}
+              numberOfLines={4}
               value={description}
               onChangeText={setDescription}
             />
             <TouchableOpacity
               style={[styles.aiButton, isGeneratingAI && styles.aiButtonDisabled]}
               onPress={handleGenerateAISuggestions}
-              disabled={isGeneratingAI}
+              disabled={isGeneratingAI || !description.trim()}
             >
               {isGeneratingAI ? (
                 <ActivityIndicator color="#FFF" size="small" />
@@ -253,6 +254,7 @@ export default function AddCustomHabitScreen({ navigation, route }) {
               )}
             </TouchableOpacity>
           </View>
+          <Text style={styles.aiHelperText}>AI suggestions are optional - write your own habit for best results</Text>
 
           {/* AI Suggestions */}
           {aiSuggestions.length > 0 && (
@@ -555,6 +557,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
+  },
+  helperText: {
+    fontSize: 13,
+    color: '#64748B',
+    marginBottom: 8,
+    fontStyle: 'italic',
+  },
+  aiHelperText: {
+    fontSize: 12,
+    color: '#94A3B8',
+    marginTop: 6,
+    fontStyle: 'italic',
   },
   inputField: {
     flexDirection: 'row',
